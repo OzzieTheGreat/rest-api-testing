@@ -14,16 +14,16 @@ const init = async () => {
         path: '/',
         handler: (request, h) => {
 
-            return 'Hello World!';
+            return `Hello ${request.query.name}!`;
         }
     });
 
     server.route({
         method: 'POST',
-        path: '/',
+        path: '/signup',
         handler: (request, h) => {
-
-            return 'I did something!';
+            const payload = request.payload;
+            return `Welcome ${payload.username}!`;
         }
     });
 
