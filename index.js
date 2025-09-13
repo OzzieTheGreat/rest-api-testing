@@ -1,6 +1,9 @@
 'use strict';
 
 const Hapi = require('@hapi/hapi');
+const Joi = require('@hapi/joi');
+const path = require('path');
+const fs = require('fs');
 
 const init = async () => {
 
@@ -9,23 +12,16 @@ const init = async () => {
         host: 'localhost'
     });
 
-    server.route({
-        method: 'GET',
-        path: '/',
-        handler: (request, h) => {
+    const routes = [];
+    const routesPath = path.join(__dirname,'routes');
 
-            return `Hello ${request.query.name}!`;
-        }
-    });
+    fs.readdirSync(routesPath).forEach((file) => {
+        const filePath = path.join(routesPath, file);
+        const exportedRoutes = require(filePath);
+        routes.push(...exportedRoutes);
+    })
 
-    server.route({
-        method: 'POST',
-        path: '/signup',
-        handler: (request, h) => {
-            const payload = request.payload;
-            return `Welcome ${payload.username}!`;
-        }
-    });
+    server.route(routes)
 
     await server.start();
     console.log('Server running on %s', server.info.uri);
