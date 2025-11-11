@@ -14,10 +14,12 @@ const init = async () => {
     const routes = [];
     const routesPath = path.join(__dirname,'routes');
 
+
     fs.readdirSync(routesPath).forEach((file) => {
         const filePath = path.join(routesPath, file);
         const exportedRoutes = require(filePath);
         routes.push(...exportedRoutes);
+
     })
 
     server.route(routes)
