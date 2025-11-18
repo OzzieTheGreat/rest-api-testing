@@ -1,9 +1,6 @@
 const fs = require('fs');
 const path = require('path');
 
-/**
- * @param { import("knex").Knex } knex
- */
 exports.seed = async function(knex) {
   const jsonFilePath = path.join(__dirname, 'menu.json');
 

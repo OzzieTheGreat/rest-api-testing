@@ -1,9 +1,6 @@
 const Joi = require('@hapi/joi');
 const MenuController = require('../controllers/menu'); 
-/**
- * An array of route objects for menu-related requests.
- * @type {Array<object>}
- */
+
 module.exports = [
   {
     method: 'GET',

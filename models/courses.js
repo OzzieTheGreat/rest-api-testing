@@ -9,3 +9,4 @@ class Courses {
     }
 }
 module.exports = new Courses();
+
