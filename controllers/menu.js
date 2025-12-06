@@ -1,11 +1,13 @@
 const MenuServices = require('../services/menu'); 
 
 class MenuController {
+
   static async getMenu(request, h) {
     try {
       const name = request.query.name; 
       const menuItems = await MenuServices.getMenu(name);
-      return h.response(menuItems).code(200);
+
+      return menuItems; 
 
     } catch (error) {
       console.error('Error fetching menu:', error);
@@ -22,6 +24,7 @@ class MenuController {
 
     try {
       const result = await MenuServices.addItem(name, price, description);
+      
       if (result === false) {
         return h.response({ 
           statusCode: 409, 
@@ -31,11 +34,11 @@ class MenuController {
 
       } 
       else {
-        return h.response(result).code(201);
+        return result;
       }
       
     } catch (error) {
-      console.error('Error adding new menu item:', error);
+      console.error('Error adding new menu item (Full Stack):', error.stack || error);
       return h.response({ 
         statusCode: 500, 
         error: 'Internal Server Error',
@@ -47,6 +50,7 @@ class MenuController {
     const { name } = request.payload;
     try {
       const deletedCount = await MenuServices.removeItem(name);
+      
       if (deletedCount === 0) {
         return h.response({ 
           statusCode: 404, 
@@ -55,10 +59,10 @@ class MenuController {
         }).code(404);
 
       } else {
-        return h.response({
+        return {
             statusCode: 200,
             message: `${deletedCount} row(s) removed successfully.`
-        }).code(200);
+        };
       }
       
     } catch (error) {
@@ -74,18 +78,19 @@ class MenuController {
     const { name, price, description, newName } = request.payload;
     try {
       const updatedCount = await MenuServices.updateItem(name, price, description, newName);
+      
       if (updatedCount === 0) {
         return h.response({ 
           statusCode: 404, 
           error: 'Not Found',
           message: `Error: An item with the name '${name}' does not exist and could not be updated.` 
         }).code(404);
-
+        
       } else {
-        return h.response({
+        return {
             statusCode: 200,
             message: `${updatedCount} row(s) updated successfully.`
-        }).code(200);
+        };
       }
       
     } catch (error) {
@@ -98,4 +103,5 @@ class MenuController {
     }
   }
 }
+
 module.exports = MenuController;
